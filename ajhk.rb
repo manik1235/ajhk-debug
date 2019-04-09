@@ -13,6 +13,8 @@ class Ajhk
   @c = 0
   @binding_enabled = true
 
+  BIND_STATE_FILE = "./ajhk_bind"
+
   class << self
     attr_accessor :c, :binding_enabled
   end
@@ -26,7 +28,9 @@ class Ajhk
   end
 
   def self.bind
-    binding.remote_pry if self.binding_enabled?
+    # Binds and pauses execution inside this class
+    # Useful for changing, updating, or reading variables
+    binding.remote_pry if self.bind?
   end
 
   def self.bind?
@@ -35,14 +39,21 @@ class Ajhk
   end
 
   def self.binding_enabled?
-    @binding_enabled
+    # Check the existence of the bind file
+    # If it's there, binding is enabled.
+    # If it's not, binding is disabled.
+    @binding_enabled = File.exist?(BIND_STATE_FILE)
   end
 
   def self.enable_binding
+    # Create a bind file
+    File.new(BIND_STATE_FILE, mode="w").close
     @binding_enabled = true
   end
 
   def self.disable_binding
+    # Remove the bind file if it exists to disable binding.
+    File.delete(BIND_STATE_FILE) if File.exist?(BIND_STATE_FILE)
     @binding_enabled = false
   end
 end
