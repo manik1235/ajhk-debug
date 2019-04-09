@@ -27,6 +27,10 @@ class Ajhk
     @c += 1
   end
 
+  def self.c_to_s
+    "AJHK: c=#{@c}"
+  end
+
   def self.bind
     # Binds and pauses execution inside this class
     # Useful for changing, updating, or reading variables
